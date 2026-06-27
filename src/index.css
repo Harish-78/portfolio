@@ -1,0 +1,107 @@
+@import "tailwindcss";
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+@theme {
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  --color-brand-50:  #eff6ff;
+  --color-brand-100: #dbeafe;
+  --color-brand-200: #bfdbfe;
+  --color-brand-300: #93c5fd;
+  --color-brand-400: #60a5fa;
+  --color-brand-500: #3b82f6;
+  --color-brand-600: #2563eb;
+  --color-brand-700: #1d4ed8;
+  --color-brand-800: #1e40af;
+
+  --color-surface:   #f7f9fc;
+  --color-surface-2: #eef3fa;
+
+  --shadow-premium: 0 24px 48px rgba(37, 99, 235, 0.15);
+  --shadow-card:    0 12px 32px rgba(37, 99, 235, 0.10);
+}
+
+/* ── Base ── */
+html {
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #f7f9fc; }
+::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: #60a5fa; }
+
+/* ── Custom animations ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(22px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes floatY {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-10px); }
+}
+@keyframes pulseGreen {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(34,197,94,0.45); }
+  50%       { box-shadow: 0 0 0 7px rgba(34,197,94,0); }
+}
+
+.animate-fade-up   { animation: fadeUp 0.7s cubic-bezier(0.16,1,0.3,1) both; }
+.animate-fade-up-1 { animation: fadeUp 0.7s 0.1s cubic-bezier(0.16,1,0.3,1) both; }
+.animate-fade-up-2 { animation: fadeUp 0.7s 0.2s cubic-bezier(0.16,1,0.3,1) both; }
+.animate-fade-up-3 { animation: fadeUp 0.7s 0.3s cubic-bezier(0.16,1,0.3,1) both; }
+.animate-float     { animation: floatY 5s ease-in-out infinite; }
+.status-dot        { animation: pulseGreen 2s ease-in-out infinite; }
+
+/* ── Nav underline ── */
+.nav-link {
+  @apply relative text-slate-500 font-semibold text-sm transition-colors hover:text-blue-600;
+}
+.nav-link::after {
+  content: '';
+  @apply absolute bottom-[-3px] left-0 w-0 h-[2px] bg-blue-500 rounded-full transition-all duration-250;
+}
+.nav-link:hover::after { width: 100%; }
+
+/* ── Project card gradient stripe ── */
+.project-stripe {
+  @apply h-1 w-full bg-gradient-to-r from-blue-500 to-blue-300 transition-all duration-300;
+}
+.project-card:hover .project-stripe {
+  @apply from-blue-700 to-blue-500;
+}
+
+/* ── Tech-pill (monospace) ── */
+.tech-pill {
+  @apply inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-slate-50 border border-slate-200 font-mono text-xs font-medium text-slate-600 transition-colors hover:bg-blue-50 hover:border-blue-200 hover:text-blue-700;
+}
+
+/* ── Skill tag hover ── */
+.skill-tag {
+  @apply cursor-default transition-colors hover:bg-blue-600 hover:text-white hover:border-blue-600;
+}
+
+/* ── Timeline ── */
+.timeline {
+  @apply relative pl-7 border-l-2 border-slate-200 ml-2;
+}
+.timeline-item {
+  @apply relative pb-9 last:pb-0;
+}
+.timeline-item::before {
+  content: '';
+  @apply absolute -left-[37px] top-[5px] w-4 h-4 rounded-full bg-white border-[3px] border-blue-500 transition-all;
+}
+.timeline-item:hover::before {
+  @apply bg-blue-500 shadow-[0_0_0_4px_#dbeafe];
+}
+
+/* ── Cert item ── */
+.cert-item {
+  @apply flex items-start gap-3 py-3.5 border-b border-slate-100 last:border-0 last:pb-0;
+}
