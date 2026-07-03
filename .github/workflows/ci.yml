@@ -11,12 +11,17 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
+      # Updated to latest version
       - uses: actions/checkout@v4
       
+      # Using Node 24 (explicitly specified)
       - uses: actions/setup-node@v4
         with:
           node-version: '24'
+          cache: 'npm'  # Added: Speeds up installs by caching dependencies
       
+      # Clean install (uses package-lock.json)
       - run: npm ci
       
-      - run: npm run build  `
+      # Build your React app
+      - run: npm run build
