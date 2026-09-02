@@ -1,31 +1,9 @@
-name: Basic React CI
-
-on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
-
-jobs:
-  verify:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-
-      # Use the latest, recommended Node version
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "24"
-          cache: "npm"
-
-      - run: npm ci
-      - run: npm run build
-
-      - name: Deploy to Cloudflare Workers
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: deploy --env production --minify
-          workingDirectory: dist
+- name: Deploy to Cloudflare Workers
+  uses: cloudflare/wrangler-action@v3
+  env:
+    FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+  with:
+    apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+    accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+    command: deploy --env production --minify
+    workingDirectory: dist
