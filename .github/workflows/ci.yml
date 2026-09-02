@@ -1,9 +1,37 @@
-- name: Deploy to Cloudflare Workers
-  uses: cloudflare/wrangler-action@v3
-  env:
-    FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-  with:
-    apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-    accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-    command: deploy --env production --minify
-    workingDirectory: dist
+name: Basic React CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Check out your code
+      - uses: actions/checkout@v4
+
+      # Set up Node.js 24 (required for registerHooks support)
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: "npm"
+
+      # Install dependencies
+      - run: npm ci
+
+      # Build your React app (runs tsc -b && vite build)
+      - run: npm run build
+
+      # Deploy to Cloudflare Workers using direct CLI approach
+      # This avoids the wrangler-action compatibility issues with Node 24
+      - name: Deploy to Cloudflare Workers
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          cd dist
+          npx wrangler deploy --env production --minify
