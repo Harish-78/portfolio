@@ -13,24 +13,29 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # Use Node 22 for the build (needed for registerHooks)
       - uses: actions/setup-node@v4
         with:
-          node-version: "20" # Changed from 22 to 20 for compatibility
+          node-version: "22"
           cache: "npm"
 
       # Clean install
       - run: npm ci
 
-      # Build your React app
+      # Build your React app with Node 22
       - run: npm run build
 
       # Deploy to Cloudflare Workers
       - name: Deploy to Cloudflare Workers
-        uses: cloudflare/wrangler-action@v3
+        # Use a specific version that supports Node 22
+        uses: cloudflare/wrangler-action@v3.11.0
         env:
-          # Temporary fix: Allow Node 20 usage until action supports Node 22/24
+          # Node 22 is required for the build, but wrangler needs this flag
           ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: true
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: deploy --env production # Added deployment command
+          # Important: Use the built files directly
+          command: deploy --env production --minify
+          # Point to the built directory
+          workingDirectory: dist
