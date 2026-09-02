@@ -11,17 +11,23 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      # Updated to latest version
       - uses: actions/checkout@v4
       
-      # Using Node 24 (explicitly specified)
+      # Use Node.js 20 LTS (more stable)
       - uses: actions/setup-node@v4
         with:
-          node-version: '24'
-          cache: 'npm'  # Added: Speeds up installs by caching dependencies
+          node-version: '20'
+          cache: 'npm'
       
-      # Clean install (uses package-lock.json)
+      # Clean install
       - run: npm ci
       
       # Build your React app
       - run: npm run build
+      
+      # Deploy to Cloudflare Workers
+      - name: Deploy to Cloudflare Workers
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
