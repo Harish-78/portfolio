@@ -2,6 +2,16 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "portfolio",
   "compatibility_date": "2026-07-03",
+  "routes": [
+    {
+      "pattern": "tnsaravana.space",
+      "custom_domain": true
+    },
+    {
+      "pattern": "www.tnsaravana.space",
+      "custom_domain": true
+    }
+  ],
   "observability": {
     "enabled": true
   },
